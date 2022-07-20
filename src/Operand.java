@@ -52,11 +52,13 @@ public class Operand {
         return this;
     }
     Operand( String str) throws Exception {
-        this.sourceValue = str;
-        this.isRoman = !str.matches("^[0-9]*[.,]?[0-9]+$");
-        if(!this.isRoman && Float.parseFloat(str) % 1.0f != 0) throw new Exception("Допустимы только целые числа");
+        this.sourceValue = str.replace(",",".");
+        if(this.sourceValue.matches("[^IVXLCDMZ\\d+\\-*\\/]")) throw new Exception("Получены недопустимые данные!");
 
-        this.value = (this.isRoman) ? convertToArabicNumber(str) : Integer.parseInt( str );
+        this.isRoman = this.sourceValue.matches("^[IVXLCDMZ]+$");
+        if(!this.isRoman && Float.parseFloat(this.sourceValue) % 1.0f != 0) throw new Exception("Допустимы только целые числа");
+
+        this.value = (this.isRoman) ? convertToArabicNumber(this.sourceValue) : Integer.parseInt( this.sourceValue );
     }
 
     Operand(Integer n) {
